@@ -1,0 +1,33 @@
+<extend name="Base/s1"/>
+<block name="body">
+
+<div class="main"><div class="main_center"><div class="center_left">
+<volist name="footermenu" id="vo">
+<dl><dt><a rel="nofollow">{$vo.title}</a></dt>
+ <volist name="vo['id']" id="son"> 
+<dd><a rel="nofollow"  href="{:U('service/index?id='.$son['id'])}">{$son.title}</a></dd>
+</volist>
+</dl>
+</volist>
+
+</div><!-- 个人中心 初始状态 start -->
+<div class="center_right" id="MemberCenterCtrl" style="display: block;">
+
+	<span class="red" style="display: block;text-align:center;margin:20px 0 20px 37px;font-weight:bold;padding:10px;font-size:17px;">{$info.title}</span>
+ 
+
+
+<empty name='info.title'><i class="glyphicon glyphicon-search red"></i>
+aoh，暂无数据！（请到后台文章发布区添加，参数ismenu=2）<else/>
+</empty>
+  {$info.content}
+			
+
+</div>
+
+<!-- 个人中心 初始状态 end --></div>
+    <script type="text/javascript">_init_area();</script>
+     
+      
+   
+</block>

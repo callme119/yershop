@@ -1,0 +1,250 @@
+<extend name="Base/pageall"/>
+<block name="body">
+
+<div class="main"><div class="main_nav"><a rel="nofollow" href="{:U("index/index")}">首页</a>&gt;<p class="red fwb">帮助中心</p>&gt;{$position}</div><div class="main_center"><div class="center_left">
+<volist name="footermenu" id="vo">
+<dl><dt><a rel="nofollow">{$vo.title}</a></dt>
+ <volist name="vo['id']" id="son"> 
+<dd><a rel="nofollow"  href="{:U('service/index?id='.$son['id'])}">{$son.title}</a></dd>
+</volist>
+</dl>
+</volist>
+
+</div><div class="center_right" style="display: none;"><div class="center_right_loading"></div></div><div id="memberCenter" style="display: block;"><!-- 个人中心 初始状态 start -->
+<div class="center_right" id="MemberCenterCtrl" style="display: block;">
+
+	<span class="red" style="display: block;text-align:center;margin:20px 0 0px 37px;font-weight:bold;padding:10px;font-size:17px;">{$info.title}55</span>
+  <div class="tab-content">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<form action="{:U()}" method="post" class="form-horizontal">
+				<!-- 基础 -->
+				<div id="tab1" class="tab-pane in tab1">
+			
+					<div class="form-item">
+						<label class="item-label">
+							店铺名称<span class="check-tips">（名称不能为空）</span>
+						</label>
+						<div class="controls">
+							<input type="text" name="title" class="text input-large" value="{$info.title|default=''}">
+						</div>
+					</div>
+				
+					
+				
+
+<div class="form-item">
+						<label class="item-label">实名认证姓名</label>
+						<div class="controls">
+							<input type="text" name="partner" class="text input-large" value="{$info.partner|default=''}">
+						</div>
+					</div>
+			             
+                                <div class="controls"><label class="item-label">身份证图片正面</label>
+									<input type="file" id="upload_picture_IDcardA">
+									<input type="hidden" name="IDcardA" id="cover_id_IDcardA" value=""/>
+									<div class="upload-img-box">
+									
+									</div>
+								</div>
+								<script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_picture_IDcardA").uploadify({
+							        "height"          : 30,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传图片",
+							        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							        "onUploadSuccess" : uploadPictureIDcardA,
+							        'onFallback' : function() {
+							            alert('未检测到兼容版本的Flash.');
+							        }
+							    });
+								function uploadPictureIDcardA(file, data){
+							    	var data = $.parseJSON(data);
+							    	var src = '';
+							        if(data.status){
+							        	$("#cover_id_IDcardA").val(data.id);
+							        	src = data.url || '__ROOT__' + data.path
+							        	$("#cover_id_IDcardA").parent().find('.upload-img-box').html(
+							        		'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+							        	);
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script>
+                            
+					
+					
+			                 <div class="controls"><label class="item-label">身份证图片反面</label>
+									<input type="file" id="upload_picture_IDcardB">
+									<input type="hidden" name="IDcardB" id="cover_id_IDcardB" value=""/>
+									<div class="upload-img-box">
+									
+									</div>
+								</div>
+								<script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_picture_IDcardB").uploadify({
+							        "height"          : 30,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传图片",
+							        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							        "onUploadSuccess" : uploadPictureIDcardB,
+							        'onFallback' : function() {
+							            alert('未检测到兼容版本的Flash.');
+							        }
+							    });
+								function uploadPictureIDcardB(file, data){
+							    	var data = $.parseJSON(data);
+							    	var src = '';
+							        if(data.status){
+							        	$("#cover_id_IDcardB").val(data.id);
+							        	src = data.url || '__ROOT__' + data.path
+							        	$("#cover_id_IDcardB").parent().find('.upload-img-box').html(
+							        		'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+							        	);
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script>	
+					
+
+<div class="controls">
+						<label class="item-label">营业执照扫描图片</label>
+						<input type="file" id="upload_picture">
+						<input type="hidden" name="IDcardC" id="icon" value="{$info['icon']|default=''}"/>
+						<div class="upload-img-box">
+						<notempty name="info['icon']">
+							<div class="upload-pre-item"><img src="{$info.icon|get_cover='path'}"/></div>
+						</notempty>
+						</div>
+					</div>
+					<script type="text/javascript">
+					//上传图片
+				    /* 初始化上传插件 */
+					$("#upload_picture").uploadify({
+				        "height"          : 30,
+				        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+				        "fileObjName"     : "download",
+				        "buttonText"      : "上传图片",
+				        "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+				        "width"           : 120,
+				        'removeTimeout'	  : 1,
+				        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+				        "onUploadSuccess" : uploadPicture,
+				        'onFallback' : function() {
+				            alert('未检测到兼容版本的Flash.');
+				        }
+				    });
+					function uploadPicture(file, data){
+				    	var data = $.parseJSON(data);
+				    	var src = '';
+				        if(data.status){
+				        	$("#icon").val(data.id);
+				        	src = data.url || '__ROOT__' + data.path;
+				        	$("#icon").parent().find('.upload-img-box').html(
+				        		'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+				        	);
+				        } else {
+				        	updateAlert(data.info);
+				        	setTimeout(function(){
+				                $('#top-alert').find('button').click();
+				                $(that).removeClass('disabled').prop('disabled',false);
+				            },1500);
+				        }
+				    }
+					</script>
+
+		<div class="controls">
+			<button class="btn submit-btn" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+			<input type="hidden" name="uid" value="{$data.id|default=''}"/>
+		</div>
+
+				</div>
+
+<script>function delcommon(event) { //获取事件源
+event = event ? event : window.event; 
+var obj = event.srcElement ? event.srcElement : event.target; 
+//这时obj就是触发事件的对象，可以使用它的各个属性 
+//还可以将obj转换成jquery对象，方便选用其他元素 
+str = obj.innerHTML.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+
+	var $obj = $(obj);
+	
+	if(obj.rel=="del")
+{ var gid=obj.name;
+var uexist="{:get_username()}";
+	//全选的实现 定义删的发送路径
+	if(uexist){
+		var del='{:U("Shopcart/delItemByuid")}';
+	
+	}
+else{
+var del='{:U("Shopcart/delItem")}';
+	
+	}
+$.ajax({
+type:'post', //传送的方式,get/post
+url:del, //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{var $obj = $(obj);
+	$obj.parent().remove();
+
+	if(data.num=="0"){  //判断购物车数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+						var html='<p class="sc_goods_none" >您的购物车还是空的，赶紧行动吧！</p>';
+					$("ul.sc_goods_ul").html(html);
+				
+	
+	}
+	else{$("div.sc_goods_foot").show();}
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+	
+	} 
+</script>
+	<div style="display: block;" class="tab_view">
+		
+
+
+</div>
+<script type="text/javascript">
+	require(['memberCenter'], function() {
+		var el = document.getElementById('MemberCenterCtrl');
+		avalon.scan(el);
+		avalon.nextTick(function() {
+			el.style.display = 'block';
+		});
+	});
+</script>
+<!-- 个人中心 初始状态 end --></div><div id="memberInfo" style="display: none;"></div><div id="memberWealth" style="display: none;"></div><div id="myCollection" style="display: none;"></div><div id="myEarnings" style="display: none;"></div><div id="modifyPassword" style="display: none;"></div><div id="myCoupons" style="display: none;"></div><div class="cb"></div></div></div>
+    <script type="text/javascript">_init_area();</script>
+        <hr/>
+        {:hook('documentDetailAfter',$info)}
+   
+</block>

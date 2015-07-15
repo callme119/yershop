@@ -1,0 +1,198 @@
+<extend name="Base/common"/>
+
+<block name="header">
+    <header class="jumbotron subhead" id="overview">
+		<div class="container">
+			<h2>{$info.title}</h2>
+			<p>
+				<span  class="pull-left">
+					<span class="author">{$info.uid|get_username}</span>
+                    <span class="author"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$info.uid|get_qq}&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1010422715:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></span>
+					<span> 发表于 {$info.create_time|date='Y-m-d H:i',###}</span>
+				</span>
+				<span class="pull-right">
+					<article:prev name="prev" info="info">
+                        <a href="{:U('?id='.$prev['id'])}">上一篇</a>
+                    </article:prev>
+                    <article:next name="next" info="info">
+                        <a href="{:U('?id='.$next['id'])}">下一篇</a>
+                    </article:next>
+				</span>
+			</p>
+		</div>
+	</header>
+</block>
+
+<block name="body">
+我的购物车
+<table cellpadding="0" cellspacing="0" border="0" id="table" class="gridtable">
+        <thead>
+            <tr>
+                <th width="420">商品名</th>
+                <th width="80">价格</th>
+                <th width="110">数量</th>
+                <th width="120">操作</th>
+            </tr>
+        </thead>
+        <form action="{$config.url}index.php/Index/cart" name="form" id="form">
+        <tbody>
+    
+          <foreach name="list" item="vo">  
+          <tr>
+                <td><span class="img_1 img1"><A href="{:U('Article/detail?id='.$vo['id'])}" > <img src="{$vo.id|get_cover_id|get_cover='path'}"  width="70" height="70"/><span class="img_1_h">{$vo.id|get_good_name}</span></span> </A></td>
+               
+                <td align="center">{$vo.price}</td>
+                <td ><a rel="jia"  class="jia" onclick="myfunction(event)">+</a><input type="text"  class="num"  id="{$vo.id}" value="{$vo.num}"/><a rel="jian" onclick="myfunction(event)" class="jian" id="oneA">-</a></td>
+                
+                <td><a  name="{$vo.id}" rel="del" onclick="myfunction(event)">删除</a>&nbsp;<a href="#">移到收藏</a></td>
+            </tr>
+         </foreach>
+        
+        </tbody></form>
+      
+    </table>   
+  <div class="text" style="float:right">
+    共{$sum}件，金额小计：<em class="price"> {$money}</em>元     <a class="btn btn-danger"  href='#' onclick="makeorder()" >去结算<i class="icon-chevron-right"></i></a>
+  </div>
+ 
+  </form>
+         
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+<h3 id="myModalLabel">用户登录</h3>
+</div>
+    <form class="form-horizontal" action="{:U("User/logincart")}" method="post">
+    <div class="control-group">
+    <label class="control-label" for="inputEmail">用户名</label>
+   <div class="controls">
+              <input type="text" id="inputEmail" class="span3" placeholder="请输入用户名"  ajaxurl="/member/checkUserNameUnique.html" errormsg="请填写1-16位用户名" nullmsg="请填写用户名" datatype="*1-16" value="" name="username">
+            </div>
+    </div>
+    <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+     <div class="controls">
+              <input type="password" id="inputPassword"  class="span3" placeholder="请输入密码"  errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
+            </div>
+    </div>
+    <div class="control-group">
+    <div class="controls">
+    <label class="checkbox">
+    <input type="checkbox"> Remember me
+    </label>
+   <button type="submit" class="btn">登录</button>
+   <p><span><span class="pull-left"><span>还没有账号? <a href="{:U("User/register")}">立即注册</a></span> </span></p>
+    </div>
+    </div>
+    </form>
+</div>
+        <hr/>
+        {:hook('documentDetailAfter',$info)}
+    </div>
+       <script type="text/javascript">
+	   var sun=$(".pull-right li");
+	   var a=sun.length; 
+	function makeorder() {
+		
+		if(a==2){alert("请先登录");$('#myModal').modal('show')}
+		if(a==3){
+			window.location.href='{:U("Shopcart/order")}' ;
+			}
+		
+		 }
+	   
+	function myfunction(event) { 
+event = event ? event : window.event; 
+var obj = event.srcElement ? event.srcElement : event.target; 
+//这时obj就是触发事件的对象，可以使用它的各个属性 
+//还可以将obj转换成jquery对象，方便选用其他元素 
+str = obj.innerHTML.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+
+	var $obj = $(obj);
+
+
+	if(obj.rel=="jia"){
+	var num=$obj.next().val(); 
+
+var gid=$obj.next().attr("id")	
+		
+		 a=parseInt(num)+1;
+ $obj.next().val(a); 
+		$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/incNum")}', //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{
+	$(".price").text(data.total);
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})}
+
+if(obj.rel=="jian")
+{ var num=$obj.prev().val(); 
+
+var gid=$obj.prev().attr("id")	
+    
+     
+    //如果文本框的值大于0才执行减去方法  
+     if(num >0){  
+      //并且当文本框的值为1的时候，减去后文本框直接清空值，不显示0  
+      if(num==1)  
+      { $("#oneA").addClass("important");
+   return true;
+      }  
+      //否则就执行减减方法  
+      else  
+      { document.getElementById("oneA").disabled=false; 
+      a=parseInt(num)-1;
+	  
+ $obj.prev().val(a);   
+    
+      }  
+    
+     }  
+   
+
+$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/decNum")}', //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{$(".price").text(data.total).fadeIn();
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+if(obj.rel=="del")
+{ var gid=obj.name;
+
+$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/delItem")}', //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{var $obj = $(obj);
+	$obj.parents("tr").empty();
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+
+
+	}
+	
+	
+    </script>
+    
+</block>

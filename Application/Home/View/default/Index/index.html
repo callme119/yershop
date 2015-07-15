@@ -1,0 +1,218 @@
+<extend name="Base/common"/>
+<block name="body">
+<!--container begin-->
+<div class="flexcontainer">
+<!--menu begin-->
+<div class="nav-wrap">
+ <!--fenlei begin--> <div class="nava">
+    <div class="goods">
+      <div>
+        <h2><span class="grid"><img src="__IMG__/grid.png"></span> <span>商品分类</span><b></b></h2>
+      </div>
+       <div class="all-goods"  id="all-goods">
+<volist name="categoryq" id="cate">
+<div class="item">
+          <div class="product"><h4><a href="{:U('home/article/index/category/'.$cate['name'])}">{$cate.title}</a> </h4></div>
+            <if condition="$cate['child'] neq false">
+              <div class="product-wrap pos"> 
+            <!--子分类-->
+            <div class="cf">
+              <div class="fl wd252 pr20">
+                <volist name="cate['child']" id="cate_sub">
+                 <ul class="cf"> <li><span><a href="{:U('home/article/lists/category/'.$cate_sub['name'])}">{$cate_sub.title}</a></span>
+                   <if condition="$cate_sub['child']">
+ <volist name="cate_sub['child']" id="cate_sub_two">
+<a href="{:U('home/article/lists/category/'.$cate_sub_two['name'])}">{$cate_sub_two.title} </a>
+           
+                            </volist>
+                       
+                    </if> 
+              
+                </li> </ul>
+                </volist>
+               
+</div>
+            </div> </div>
+            </if>
+       
+        </div>
+</volist>
+        
+      </div></div>
+
+    <!--fenlei over-->
+    <ul class="menu">
+      <think:nav name="nav">
+                    	<eq name="nav.pid" value="0">
+                       <li>
+                            <a href="{$nav.url|get_nav_url}" target="<eq name='nav.target' value='1'>_blank<else/>_self</eq>">{$nav.title}</a>
+                      </li>
+                        </eq>
+                    </think:nav>
+    </ul>
+    
+  </div>   <script>
+    $(".menu-list li").eq(0).css('background','#474747');  
+     </script> <!--首页高亮-->  
+</div><!--menu over-->
+    
+<!--pic begin--><!--幻灯片首个li设置class为CurrentPic-->
+<script>$().ready(function () {
+	  $(".LunBoslide>li").eq(0).attr("class","CurrentPic");
+	  })</script>
+	  <div class="screen">
+<div class="LunBo">
+<ul class="LunBoslide"><volist name="slide" id="vo"> <li><a href="{$vo.url|get_nav_url}" > <img src="{$vo.icon|get_cover='path'}"/></a> </li></volist>
+</ul>
+<div class="LunBoNum">
+<span class="CurrentNum">1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+var PicTotal = 5;
+var CurrentIndex;
+var ToDisplayPicNumber = 0;
+$("div.LunBo div.LunBoNum span").click(DisplayPic);
+function DisplayPic() {
+// 测试是父亲的第几个儿子
+CurrentIndex = $(this).index();
+// 删除所有同级兄弟的类属性
+$(this).parent().children().removeClass("CurrentNum")
+// 为当前元素添加类
+$(this).addClass("CurrentNum");
+// 隐藏全部图片
+var Pic = $(this).parent().parent().children("ul");
+$(Pic).children().hide();
+// 显示指定图片
+$(Pic).children("li").eq(CurrentIndex).show();
+}
+function PicNumClick() {
+$("div.LunBo div.LunBoNum span").eq(ToDisplayPicNumber).trigger("click");
+ToDisplayPicNumber = (ToDisplayPicNumber + 1) % PicTotal;
+setTimeout("PicNumClick()",3000);
+}
+setTimeout("PicNumClick()",3000);
+</script>
+
+ <!--pic over-->
+
+
+<div  class="rside">
+<span><img data-img="2" src="http://img12.360buyimg.com/da/jfs/t307/47/730614248/16617/d99caa4b/542157edN66043046.jpg"  alt=""></span>
+<div class="note"><ul><li class="selected">公告</li><li>活动</li></ul></div>
+<div id="msg">
+<div class="message"><ul><volist name="notice" id="vo"><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$vo.title}</a></li></volist> </ul></div>
+<div class="message"  style="display: none"><ul><volist name="activity"  id="vo" ><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$vo.title}</a></li></volist></ul></div>
+<div class="message"  style="display: none"></div>
+</div>
+
+
+</div>
+
+</div><!--screen over-->
+</div><!--flexcontainer over-->
+
+<style type="text/css" rel="stylesheet">/* jdf-1.0.0/ ui-base.css Date:2015-03-24 17:41:14 */
+a,address,b,big,blockquote,body,center,cite,code,dd,del,div,dl,dt,em,fieldset,font,form,h1,h2,h3,h4,h5,h6,html,i,iframe,img,ins,label,legend,li,ol,p,pre,small,span,strong,u,ul,var{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block} 
+	 
+	 hr{ -moz-box-sizing:content-box;box-sizing:content-box;height:0;}</style>
+<!--循环开始-->
+
+<volist name="category" id="vo"  key="k" >
+<div class="list">
+<h3><span class="floor">{$k}F</span>{$vo.title}</h3>
+<div class="category">
+<div class="icon">
+<a href="{:U('Article/index?category='.$vo['name'])}" target="_blank"><img src="{$vo.icon|get_cover='path'}"  />
+</a>
+</div>
+<!--栏目推荐位调用结束-->
+<!--栏目文章调用开始-->
+<ul class="article">
+  
+             <volist name="vo.doc" id="article">                      
+<li>
+                    <div class="pic" >
+                        <a class="yershop_img" href="{:U('Article/detail?id='.$article['id'])}" target="_blank" title="{$article.title}">
+                            <img src="{$article.cover_id|get_cover='path'}" ></a>
+                       
+                    </div>
+                    <div class="name"><a href="{:U('Article/detail?id='.$article['id'])}"  target="_blank" title="{$article.title}">{$article.title}</a></div>
+                    <div class="price">
+                        <font>￥</font><span>{$article.price}</span>
+                        <span>{$v|get_good_yprice}</span>
+                    </div>
+  </li>   </volist>
+   
+        
+       
+                </ul>
+</div>				<!--栏目文章调用开始-->
+</div></volist> 
+<!--循环结束-->
+ 
+<script type="text/javascript">
+ //首页添加到购物车图片显示与隐藏
+$(document).ready(function () {
+	  $("div.pic").mouseenter(function(e){ $(this).find("a").animate({
+    top:'-30px',height:'140px'
+  }); $(this).find("div").animate({
+    top:'-30px',
+  });
+   });
+    $("div.pic").mouseleave(function(e){$(this).find("a").animate({
+   top:'0px',height:'140px'
+  });$(this).find("div").animate({top:'0px',});
+  });
+      })
+//首页添加到购物车
+function AddProductToCart(i)
+{ var a='{$url}';
+	var goodid=i;
+var url='{:U("Shopcart/addItem")}';//地址
+$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/addgood")}', //发送数据的地址
+ data:{
+	 id:goodid,tag:1
+ },
+ dataType: "json",
+success:function(data)
+{
+
+var html='<li><img src="'+data.src+'">'+data.title+'<span class="red" style="text-align:left"> '
++data.price+'元</span>'+'<a name="'+goodid+'" rel="del" class="red" onclick="delcommon(event)">删除</a>'+'</li>';//创建节点
+if(data.exsit=="1"){
+	alert("购物车已存在该商品，数量+1");
+//后台返回数据，判断购物车中是否已存在，存在，不追加节点
+
+}	
+else{
+alert(data.msg);//后台返回数据，判断购物车中是否已存在，不存在，追加节点
+	$("p.sc_goods_none").remove();//移除节点
+$("ul.sc_goods_ul").append(html);//追加节点
+
+}
+if(data.num=="0"){ //判断数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+	}
+	else{$("div.sc_goods_foot").show();}
+},
+error:function (XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+
+		
+			</script>
+
+
+            
+</block> 
