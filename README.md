@@ -11,6 +11,6 @@ php>=5.3
 =======
 进入安装路径install.php，自动安装
 
-开发文档
-
-yershop.cn
+服务支持
+=======
+http://yershop.cn
